@@ -57,14 +57,15 @@ class pos:
 			if len(token) != 0 and ".".encode("utf-8") in token[0]:
 				word=token[1]	
 				print(word+" "+tempwordsplit[index])					
-				tempwordsplit[index]=tempwordsplit[index].encode('utf-8').translate(None,'"*+<=>^`{|}~')
+				tempwordsplit[index]=tempwordsplit[index].encode('utf-8').translate(None,'"*+<=>^`\'{|}~')
 				tempwordsplit[index]=tempwordsplit[index].decode("utf-8")
 				if  word == tempwordsplit[index]:
 					final.write(word+" "+token[2]+" ")
-					m=re.search(r"(?<=af=').*,",token[4],re.UNICODE)
-					if(m is not None):
-						rootlist=m.group(0).split(",")
-						final.write(rootlist[0]+" "+rootlist[len(rootlist)-2]+"\n")
+					if len(token) > 4:
+						m=re.search(r"(?<=af=').*,",token[4],re.UNICODE)
+						if(m is not None):
+							rootlist=m.group(0).split(",")
+							final.write(rootlist[0]+" "+rootlist[len(rootlist)-2]+"\n")
 					index=index+1
 				elif  word in tempwordsplit[index]:
 					if(re.search(r'-|/|\\|_|:',tempwordsplit[index],re.UNICODE) != None):
@@ -73,19 +74,21 @@ class pos:
 						index+=1
 					elif(re.search(r'\?|!|,|;',tempwordsplit[index],re.UNICODE) != None):
 						final.write(word+" "+token[2]+" ")
+						if len(token) > 4:
+							m=re.search(r"(?<=af=').*,",token[4],re.UNICODE)
+							if(m is not None):
+								rootlist=m.group(0).split(",")
+								final.write(rootlist[0]+" "+rootlist[len(rootlist)-2]+"\n")
+						word=tempwordsplit[index][len(tempwordsplit[index])-1]
+						final.write(word+" SYM "+word+"\n")
+						index=index+1
+				elif tempwordsplit[index] in word and tempwordsplit[index+1].encode('utf-8').translate(None,',"?!,;').decode("utf-8") in word:
+					final.write(tempwordsplit[index]+" "+token[2]+" ")
+					if len(token) > 4:
 						m=re.search(r"(?<=af=').*,",token[4],re.UNICODE)
 						if(m is not None):
 							rootlist=m.group(0).split(",")
 							final.write(rootlist[0]+" "+rootlist[len(rootlist)-2]+"\n")
-						word=tempwordsplit[index][len(tempwordsplit[index])-1]
-						final.write(word+" SYM "+word+"\n")
-						index=index+1
-				elif tempwordsplit[index] in word and tempwordsplit[index+1] in word:
-					final.write(tempwordsplit[index]+" "+token[2]+" ")
-					m=re.search(r"(?<=af=').*,",token[4],re.UNICODE)
-					if(m is not None):
-						rootlist=m.group(0).split(",")
-						final.write(rootlist[0]+" "+rootlist[len(rootlist)-2]+"\n")
 					index=index+1
 					final.write(tempwordsplit[index]+" "+token[2]+" ")
 					final.write(tempwordsplit[index]+"\n")
