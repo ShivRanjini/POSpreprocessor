@@ -9,9 +9,13 @@ class pos:
 		strwithspace=""
 		for i in range(0,len(input)):
 			if input[i] == '.'.encode("utf-8") and input[i+1] != ' '.encode("utf-8"):
-				strwithspace+=input[i]+' '.encode("utf-8")
+				if not ((i>0 and input[i-1].isdigit()) and (i<len(input)-1 and input[i+1].isdigit())):				
+					strwithspace+=input[i]+' '.encode("utf-8")
+				else:
+					strwithspace+=input[i]
 			elif(input[i] == ','.encode("utf-8") and input[i+1] != ' '.encode("utf-8")):
-				strwithspace+=input[i]+' '.encode("utf-8")
+				if  not ((i>0 and input[i-1].isdigit()) and (i<len(input)-1 and input[i+1].isdigit())):			
+					strwithspace+=input[i]+' '.encode("utf-8")
 			elif(input[i] == ';'.encode("utf-8") and input[i+1] != ' '.encode("utf-8")):
 				strwithspace+=input[i]+' '.encode("utf-8")
 			elif (input[i] == '\n'.encode("utf-8") and (input[i-2]+input[i-1]!='. '.encode("utf-8") or input[i-1]!='.'.encode("utf-8"))):
@@ -28,6 +32,9 @@ class pos:
 				if strwithspace[i-1].isdigit():
 					ustr += strwithspace[i+1]
 					i=i+2
+				elif strwithspace[i+1].isdigit():
+					ustr += strwithspace[i]
+					i=i+1
 				elif strwithspace[i-3] == ' '.encode("utf-8") or strwithspace[i-2] == ' '.encode("utf-8"):
 					i=i+2
 				else:		
