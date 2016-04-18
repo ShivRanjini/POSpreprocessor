@@ -16,6 +16,12 @@ class pos:
 			elif(input[i] == ','.encode("utf-8") and input[i+1] != ' '.encode("utf-8")):
 				if  not ((i>0 and input[i-1].isdigit()) and (i<len(input)-1 and input[i+1].isdigit())):			
 					strwithspace+=input[i]+' '.encode("utf-8")
+			elif input[i] == ','.encode("utf-8"):
+				if  ((i>0 and input[i-1] == ' ') and (i<len(input)-1 and input[i+1] == ' ')):
+					tmpstr = strwithspace		
+					strwithspace = tmpstr.strip()+input[i]+' '.encode("utf-8")
+				else:
+					strwithspace+=input[i]
 			elif(input[i] == ';'.encode("utf-8") and input[i+1] != ' '.encode("utf-8")):
 				strwithspace+=input[i]+' '.encode("utf-8")
 			elif (input[i] == '\n'.encode("utf-8") and (input[i-2]+input[i-1]!='. '.encode("utf-8") or input[i-1]!='.'.encode("utf-8"))):
@@ -36,7 +42,10 @@ class pos:
 					ustr += strwithspace[i]
 					i=i+1
 				elif strwithspace[i-3] == ' '.encode("utf-8") or strwithspace[i-2] == ' '.encode("utf-8"):
-					i=i+2
+					if strwithspace[i + 2].isdigit():
+						i=i+1
+					else:
+						i=i+2
 				else:		
 					ustr += strwithspace[i]
 					i=i+1
@@ -49,7 +58,6 @@ class pos:
 	def parseposout(self,posout,final,tempwordsplit):
 		index=0
 		out=posout.split("\n")
-		print(out)
 		for line in out:
 			if "SYM".encode('utf-8') in line:
 				continue;
