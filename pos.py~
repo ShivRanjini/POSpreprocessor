@@ -42,7 +42,7 @@ class pos:
 					ustr += strwithspace[i]
 					i=i+1
 				elif strwithspace[i-3] == ' '.encode("utf-8") or strwithspace[i-2] == ' '.encode("utf-8"):
-					if i+2 < len(strwithspace) and strwithspace[i + 2].isdigit():
+					if strwithspace[i + 2].isdigit():
 						i=i+1
 					else:
 						i=i+2
